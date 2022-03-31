@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
 # Rick Astley in your Terminal.
 # By Serene Han and Justine Tunney <3
 # Saved for posterity by CryptoDragonLady
@@ -76,7 +77,17 @@ audpid=$!
 #echo -e "${yell}Fetching video..."
 # Sync FPS to reality as best as possible. Mac's freebsd version of date cannot
 # has nanoseconds so inject python. :/
-python <(cat <<EOF
+if has? python; then
+  PYTHON=python
+elif has? python3; then
+  PYTHON=python3
+else
+  # if we can't show the visual... always gonna give you up, always gonna let you down.
+  # it's a good thing Rick Astley would never <3
+  cleanup && quit
+fi
+
+${PYTHON} <(cat <<EOF
 import sys
 import time
 fps = 25; time_per_frame = 1.0 / fps
